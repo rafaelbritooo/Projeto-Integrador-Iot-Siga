@@ -1,0 +1,207 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e14]:
+          - generic [ref=e15]: SAN
+          - generic [ref=e16]: EAS
+      - navigation [ref=e17]:
+        - button "Início" [ref=e18] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: Início
+        - button "Mapa" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+          - generic [ref=e27]: Mapa
+        - button "Notificações" [ref=e28] [cursor=pointer]:
+          - img [ref=e29]
+          - generic [ref=e32]: Notificações
+        - button "Dispositivos" [ref=e33] [cursor=pointer]:
+          - img [ref=e34]
+          - generic [ref=e37]: Dispositivos
+      - generic [ref=e42]:
+        - generic [ref=e43]: JA
+        - generic [ref=e44]:
+          - paragraph [ref=e45]: João Augusto
+          - paragraph [ref=e46]: Administrador
+          - generic [ref=e49]: Online
+      - button "Recolher sidebar" [ref=e50] [cursor=pointer]:
+        - img [ref=e51]
+    - generic [ref=e54]:
+      - banner [ref=e55]:
+        - generic [ref=e56]:
+          - button [ref=e57] [cursor=pointer]:
+            - img [ref=e58]
+          - generic [ref=e59]:
+            - heading "Visão Geral" [level=1] [ref=e60]
+            - paragraph [ref=e61]: Monitoramento em tempo real das condições de alagamento.
+        - generic [ref=e62]:
+          - button "Lagoa Seca" [ref=e63] [cursor=pointer]:
+            - img [ref=e64]
+            - generic [ref=e67]: Lagoa Seca
+            - img [ref=e68]
+          - generic [ref=e70]:
+            - button [ref=e71] [cursor=pointer]:
+              - img [ref=e72]
+            - generic [ref=e75]: "3"
+          - button [ref=e76] [cursor=pointer]:
+            - img [ref=e77]
+          - button "JA João Augusto" [ref=e79] [cursor=pointer]:
+            - generic [ref=e80]: JA
+            - generic [ref=e81]: João Augusto
+            - img [ref=e82]
+      - main [ref=e84]:
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - img [ref=e89]
+              - generic [ref=e95]:
+                - paragraph [ref=e96]: Dispositivos
+                - paragraph [ref=e97]: Registrados
+                - paragraph [ref=e98]: "12"
+                - paragraph [ref=e99]: Total de sensores
+            - generic [ref=e100]:
+              - img [ref=e102]
+              - generic [ref=e107]:
+                - paragraph [ref=e108]: Dispositivos
+                - paragraph [ref=e109]: Ativos
+                - paragraph [ref=e110]: "10"
+                - paragraph [ref=e111]: ● Online agora
+            - generic [ref=e112]:
+              - img [ref=e114]
+              - generic [ref=e116]:
+                - paragraph [ref=e117]: Alertas
+                - paragraph [ref=e118]: Hoje
+                - paragraph [ref=e119]: "2"
+                - paragraph [ref=e120]: Requer atenção
+            - generic [ref=e121]:
+              - img [ref=e123]
+              - generic [ref=e125]:
+                - paragraph [ref=e126]: Áreas
+                - paragraph [ref=e127]: Monitoradas
+                - paragraph [ref=e128]: "4"
+                - paragraph [ref=e129]: Regiões cobertas
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - generic [ref=e133]:
+                  - generic [ref=e134]:
+                    - generic [ref=e135]: Índice de Chuvas por Mês
+                    - button [ref=e136] [cursor=pointer]:
+                      - img [ref=e137]
+                  - generic [ref=e139]:
+                    - combobox [ref=e140] [cursor=pointer]:
+                      - option "Últimos 12 meses" [selected]
+                      - option "Últimos 6 meses"
+                      - option "Este ano"
+                    - button [ref=e141] [cursor=pointer]:
+                      - img [ref=e142]
+                - application [ref=e148]:
+                  - generic [ref=e181]:
+                    - generic [ref=e182]:
+                      - generic [ref=e184]: Jan
+                      - generic [ref=e186]: Fev
+                      - generic [ref=e188]: Mar
+                      - generic [ref=e190]: Abr
+                      - generic [ref=e192]: Mai
+                      - generic [ref=e194]: Jun
+                      - generic [ref=e196]: Jul
+                      - generic [ref=e198]: Ago
+                      - generic [ref=e200]: Set
+                      - generic [ref=e202]: Out
+                      - generic [ref=e204]: Nov
+                      - generic [ref=e206]: Dez
+                    - generic [ref=e207]:
+                      - generic [ref=e209]: "0"
+                      - generic [ref=e211]: "150"
+                      - generic [ref=e213]: "300"
+                      - generic [ref=e215]: "450"
+                      - generic [ref=e217]: "600"
+                    - generic [ref=e218]: mm
+                - generic [ref=e221]: Índice de Chuva (mm)
+              - generic [ref=e222]:
+                - generic [ref=e223]:
+                  - generic [ref=e224]: Mapa de Monitoramento
+                  - generic [ref=e225]:
+                    - generic [ref=e226]: Normal
+                    - generic [ref=e228]: Atenção
+                    - generic [ref=e230]: Risco
+                - generic [ref=e233]:
+                  - generic:
+                    - generic:
+                      - img
+                  - generic:
+                    - generic [ref=e240]:
+                      - button "Zoom in" [ref=e241] [cursor=pointer]: +
+                      - button "Zoom out" [ref=e242] [cursor=pointer]: −
+                    - generic [ref=e243]:
+                      - link "Leaflet" [ref=e244] [cursor=pointer]:
+                        - /url: https://leafletjs.com
+                        - img [ref=e245]
+                        - text: Leaflet
+                      - text: "| ©"
+                      - link "OpenStreetMap" [ref=e249] [cursor=pointer]:
+                        - /url: https://www.openstreetmap.org/copyright
+            - generic [ref=e251]:
+              - generic [ref=e252]:
+                - generic [ref=e253]: Alertas Recentes
+                - button "Ver todos" [ref=e254] [cursor=pointer]
+              - generic [ref=e255]:
+                - generic [ref=e257]:
+                  - generic [ref=e258]: 🌊
+                  - generic [ref=e259]:
+                    - generic [ref=e260]:
+                      - generic [ref=e261]: Alteração no Nível de Água
+                      - generic [ref=e262]: Risco de Alagamento
+                    - paragraph [ref=e263]: "Houve a detecção de variações relacionadas ao aumento no fluxo da água no bairro: Lagoa Seca."
+                    - generic [ref=e264]:
+                      - img [ref=e265]
+                      - generic [ref=e268]: há 5 minutos
+                      - generic [ref=e270]: "Sensor: JOYCE"
+                - generic [ref=e272]:
+                  - generic:
+                    - generic:
+                      - img
+          - generic [ref=e276]:
+            - generic [ref=e277]:
+              - generic [ref=e278]: Dispositivos Registrados
+              - button "Ver todos" [ref=e279] [cursor=pointer]
+            - table [ref=e281]:
+              - rowgroup [ref=e282]:
+                - row "NOME TIPO STATUS LOCALIDADE ÚLTIMA LEITURA NÍVEL ATUAL IDENTIFICADOR AÇÕES" [ref=e283]:
+                  - columnheader "NOME" [ref=e284]
+                  - columnheader "TIPO" [ref=e285]
+                  - columnheader "STATUS" [ref=e286]
+                  - columnheader "LOCALIDADE" [ref=e287]
+                  - columnheader "ÚLTIMA LEITURA" [ref=e288]
+                  - columnheader "NÍVEL ATUAL" [ref=e289]
+                  - columnheader "IDENTIFICADOR" [ref=e290]
+                  - columnheader "AÇÕES" [ref=e291]
+              - rowgroup [ref=e292]:
+                - row "JOYCE Sensor de Alagamento Ativo Lagoa Seca há 12 segundos 31/05/2026 14:32 72% 2026IOT" [ref=e293]:
+                  - cell "JOYCE" [ref=e294]:
+                    - generic [ref=e295]:
+                      - img [ref=e297]
+                      - generic [ref=e302]: JOYCE
+                  - cell "Sensor de Alagamento" [ref=e303]
+                  - cell "Ativo" [ref=e304]:
+                    - generic [ref=e305]: Ativo
+                  - cell "Lagoa Seca" [ref=e307]
+                  - cell "há 12 segundos 31/05/2026 14:32" [ref=e308]:
+                    - text: há 12 segundos
+                    - text: 31/05/2026 14:32
+                  - cell "72%" [ref=e309]:
+                    - generic [ref=e311]: 72%
+                  - cell "2026IOT" [ref=e314]
+                  - cell [ref=e315]:
+                    - button [ref=e316] [cursor=pointer]:
+                      - img [ref=e317]
+            - generic [ref=e321]:
+              - generic [ref=e322]: Mostrando 1 de 1 dispositivo
+              - generic [ref=e323]:
+                - button [ref=e324] [cursor=pointer]:
+                  - img [ref=e325]
+                - button "1" [ref=e327] [cursor=pointer]
+                - button [ref=e328] [cursor=pointer]:
+                  - img [ref=e329]
+  - generic [ref=e331]: "0"
