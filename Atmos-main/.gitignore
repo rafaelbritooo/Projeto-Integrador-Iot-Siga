@@ -1,0 +1,29 @@
+# Arquivos de ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# Dependências PHP
+/vendor/
+
+# Dependências JavaScript
+/node_modules/
+
+# Builds gerados
+/public/build/
+/public/hot
+
+# Cache e arquivos temporários
+.phpunit.result.cache
+__pycache__/
+*.py[cod]
+
+# Ambientes virtuais Python
+venv/
+.venv/
+
+# Banco de dados local
+/database/database.sqlite
+
+# Logs
+*.log
