@@ -2,6 +2,10 @@
 
 return [
 
+    'sensor' => [
+        'token' => env('SENSOR_API_TOKEN'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -14,7 +18,7 @@ return [
     |
     */
 
-     'mistral' => [
+    'mistral' => [
         'api_key' => env('MISTRAL_API_KEY'),
     ],
 
@@ -41,5 +45,5 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-''
+    '',
 ];

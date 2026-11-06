@@ -2,6 +2,28 @@ import { useState } from "react";
 import { C, cardStyle, ic, navItems, visibleAlerts, visibleDevices, SigaLogo } from "../data/sigaData";
 
 export function Sidebar({ active, onNav }: { active: string; onNav: (k: string) => void }) {
+  const logout = () => {
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+
+    if (!token) {
+      console.error("Token CSRF não encontrado. Não foi possível sair do sistema.");
+      return;
+    }
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/logout";
+
+    const csrfInput = document.createElement("input");
+    csrfInput.type = "hidden";
+    csrfInput.name = "_token";
+    csrfInput.value = token;
+    form.appendChild(csrfInput);
+
+    document.body.appendChild(form);
+    form.submit();
+  };
+
   return (
     <aside style={{ width: 272, minWidth: 272, height: "100%", background: C.card, borderRight: "1px solid #E5EAF0", display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "16px 16px 0" }}><SigaLogo /></div>
@@ -37,6 +59,9 @@ export function Sidebar({ active, onNav }: { active: string; onNav: (k: string) 
                 <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.green, display: "inline-block" }} />
                 <span style={{ fontSize: 12, color: C.green, fontWeight: 500 }}>Online</span>
               </div>
+              <button type="button" onClick={logout} style={{ marginTop: 14, width: "100%", height: 36, border: `1px solid ${C.border}`, borderRadius: 8, background: "transparent", color: C.secondaryText, cursor: "pointer", fontFamily: "inherit", fontSize: 13, fontWeight: 600 }}>
+                Sair
+              </button>
             </div>
           </div>
         </div>
