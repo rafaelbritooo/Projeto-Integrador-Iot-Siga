@@ -1,0 +1,95 @@
+
+:root {
+    --siga-primary: #0B63D8;
+    --siga-dark-navy: #0F2747;
+    --siga-green: #13B866;
+    --siga-red: #FF3838;
+    --siga-amber: #F5A900;
+    --siga-bg: #F5F7FA;
+    --siga-card: #FFFFFF;
+    --siga-border: #E5EAF0;
+    --siga-main-text: #1E293B;
+    --siga-secondary-text: #64748B;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--siga-bg);
+    color: var(--siga-main-text);
+}
+
+.siga-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.siga-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.siga-content {
+    padding: 28px 32px;
+}
+
+.dashboard-welcome {
+    margin-bottom: 24px;
+}
+
+.dashboard-welcome h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.dashboard-welcome p {
+    color: var(--siga-secondary-text);
+    margin: 0;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.dashboard-card {
+    background: var(--siga-card);
+    border: 1px solid var(--siga-border);
+    border-radius: 16px;
+    padding: 24px;
+    min-height: 145px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(15, 39, 71, 0.05);
+}
+
+.dashboard-card span,
+.dashboard-card small {
+    color: var(--siga-secondary-text);
+}
+
+.dashboard-card strong {
+    font-size: 32px;
+}
+
+@media (max-width: 1000px) {
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .siga-content {
+        padding: 18px;
+    }
+}
