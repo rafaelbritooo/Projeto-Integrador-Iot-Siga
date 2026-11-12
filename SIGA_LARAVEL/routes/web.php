@@ -1,13 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Http;
-use App\Http\Controllers\SensorDataController;
-use App\Http\Controllers\WeatherNewsController;
-use App\Http\Controllers\WeatherController;
-use App\Http\Controllers\CompareController;
 use App\Http\Controllers\AuraController;
-
+use App\Http\Controllers\CompareController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReadingController;
+use App\Http\Controllers\SensorDataController;
+use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\WeatherNewsController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 
 // Página principal da Cloudinha
 Route::get('/cloudinha', function () {
@@ -17,20 +21,24 @@ Route::get('/cloudinha', function () {
 // Rota para o chat da Cloudinha (requisições AJAX)
 Route::post('/cloudinha', [AuraController::class, 'chat']);
 
-
-
-Route::get('/comparar', [CompareController::class, 'index'])->name('compare.index');;
-
+Route::get('/comparar', [CompareController::class, 'index'])->name('compare.index');
 
 Route::get('/api/weather', [WeatherController::class, 'apiWeather'])->name('api.weather');
 
-
 // Dashboard principal do SIGA
-Route::get('/dashboard', [SensorDataController::class, 'index'])->name('siga.dashboard');
-Route::redirect('/', '/dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('siga.dashboard');
+Route::get('/', fn () => redirect()->route('siga.dashboard'));
+Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('siga.dashboard.summary');
+Route::get('/dashboard/chart', [DashboardController::class, 'chart'])->name('siga.dashboard.chart');
+Route::get('/dashboard/alerts', [DashboardController::class, 'recentAlerts'])->name('siga.dashboard.alerts');
+Route::get('/dashboard/readings', [DashboardController::class, 'readings'])->name('siga.dashboard.readings');
+Route::get('/mapa', [MapController::class, 'index'])->name('siga.map');
+Route::get('/mapa/dados', [MapController::class, 'data'])->name('siga.map.data');
+Route::get('/mapa/dispositivos', [MapController::class, 'data'])->name('siga.map.devices');
+Route::get('/notificacoes', [NotificationController::class, 'index'])->name('siga.notifications');
+Route::get('/leituras', [ReadingController::class, 'index'])->name('siga.readings');
 
 Route::get('/sobre', [SensorDataController::class, 'sobre'])->name('siga.sobre');
-
 
 Route::get('/sensor-gauges-only', [SensorDataController::class, 'gauges'])->name('sensor.gauges');
 
@@ -53,18 +61,17 @@ Route::get('/weather-map', function () {
     return view('weather.weather-map');
 })->name('weather.map');
 
-
-Route::get('/api/weather-click', function(\Illuminate\Http\Request $request) {
+Route::get('/api/weather-click', function (Request $request) {
     $lat = $request->query('lat');
     $lon = $request->query('lon');
     $apiKey = env('OPENWEATHER_API_KEY');
 
-    $response = Http::get("https://api.openweathermap.org/data/2.5/weather", [
+    $response = Http::get('https://api.openweathermap.org/data/2.5/weather', [
         'lat' => $lat,
         'lon' => $lon,
         'units' => 'metric',
         'lang' => 'pt_br',
-        'appid' => $apiKey
+        'appid' => $apiKey,
     ]);
 
     return $response->json();

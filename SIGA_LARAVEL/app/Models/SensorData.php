@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SensorData extends Model
 {
+    protected $hidden = [
+        'device_id',
+    ];
+
     protected $fillable = [
         'water_level_cm',
         'rain_sensor_raw',
@@ -22,5 +27,10 @@ class SensorData extends Model
             'pump_on' => 'boolean',
             'simulation' => 'boolean',
         ];
+    }
+
+    public function device(): BelongsTo
+    {
+        return $this->belongsTo(Device::class);
     }
 }
