@@ -14,7 +14,7 @@ return [
     |
     */
 
-     'mistral' => [
+    'mistral' => [
         'api_key' => env('MISTRAL_API_KEY'),
     ],
 
@@ -23,6 +23,14 @@ return [
     ],
     'inmet' => [
         'url' => env('INMET_API_URL'),
+    ],
+    'google_geolocation' => [
+        'api_key' => env('GOOGLE_GEOLOCATION_API_KEY'),
+        'url' => env('GOOGLE_GEOLOCATION_API_URL', 'https://www.googleapis.com/geolocation/v1/geolocate'),
+        'timeout' => (int) env('GOOGLE_GEOLOCATION_TIMEOUT', 8),
+        'minimum_interval_seconds' => (int) env('WIFI_GEOLOCATION_MINIMUM_INTERVAL', 300),
+        'offline_after_minutes' => (int) env('DEVICE_OFFLINE_AFTER_MINUTES', 5),
+        'approximate_accuracy_meters' => (int) env('WIFI_LOCATION_APPROXIMATE_ACCURACY_METERS', 100),
     ],
 
     'resend' => [
@@ -41,5 +49,4 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-''
 ];

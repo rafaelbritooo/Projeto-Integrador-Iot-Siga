@@ -14,18 +14,18 @@ class SensorDataApiTest extends TestCase
     {
         $response = $this->postJson('/api/sensor-data', [
             'water_level_cm' => 14.5,
-            'rain_sensor_raw' => 1820,
+            'rain_sensor_raw' => 1,
             'water_status' => 'normal',
             'pump_on' => false,
             'simulation' => false,
         ]);
 
-        $response->assertOk()
-            ->assertJson(['message' => 'Data saved successfully!']);
+        $response->assertCreated()
+            ->assertJsonPath('message', 'Leitura salva com sucesso!');
 
         $this->assertDatabaseHas('sensor_data', [
             'water_level_cm' => 14.5,
-            'rain_sensor_raw' => 1820,
+            'rain_sensor_raw' => 1,
             'water_status' => 'normal',
             'pump_on' => 0,
             'simulation' => 0,
@@ -36,7 +36,7 @@ class SensorDataApiTest extends TestCase
     {
         $this->postJson('/api/sensor-data', [
             'water_level_cm' => 14.5,
-        ])->assertOk();
+        ])->assertCreated();
 
         $this->assertDatabaseHas('sensor_data', [
             'water_level_cm' => 14.5,
@@ -44,7 +44,7 @@ class SensorDataApiTest extends TestCase
         ]);
     }
 
-    public function test_it_preserves_compatibility_with_legacy_sensor_data(): void
+    public function test_it_rejects_fields_outside_the_esp32_contract(): void
     {
         $response = $this->postJson('/api/sensor-data', [
             'luminosity' => 420.5,
@@ -53,14 +53,9 @@ class SensorDataApiTest extends TestCase
             'humidity' => 68,
         ]);
 
-        $response->assertOk();
-
-        $this->assertDatabaseHas('sensor_data', [
-            'luminosity' => 420.5,
-            'rain' => 0,
-            'temperature' => 24.3,
-            'humidity' => 68,
-        ]);
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['data', 'sensor_data']);
+        $this->assertSame(0, SensorData::count());
     }
 
     public function test_it_returns_validation_errors_for_invalid_sensor_data(): void

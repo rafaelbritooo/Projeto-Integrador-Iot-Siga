@@ -9,16 +9,11 @@
 
     <link rel="stylesheet" href="{{ asset('css/siga.css') }}">
 
-    <!-- Leaflet -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @stack('styles')
 </head>
 
 <body>
@@ -39,8 +34,11 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ asset('js/siga-navigation.js') }}"></script>
     <script src="{{ asset('js/siga.js') }}"></script>
-
+    <script src="{{ asset('js/siga-pages.js') }}"></script>
     @stack('scripts')
 
 </body>
