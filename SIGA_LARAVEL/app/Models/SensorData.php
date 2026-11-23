@@ -17,6 +17,8 @@ class SensorData extends Model
         'water_status',
         'pump_on',
         'simulation',
+        'device_id',
+        'sensor_id',
     ];
 
     protected function casts(): array
@@ -32,5 +34,10 @@ class SensorData extends Model
     public function device(): BelongsTo
     {
         return $this->belongsTo(Device::class);
+    }
+
+    public function sensor(): BelongsTo
+    {
+        return $this->belongsTo(Sensor::class, 'sensor_id', 'id_sensores');
     }
 }

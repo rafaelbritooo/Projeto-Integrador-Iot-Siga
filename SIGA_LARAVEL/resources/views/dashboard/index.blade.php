@@ -18,7 +18,9 @@
     >
         <section class="metric-grid" aria-label="Indicadores das leituras">
             <article class="metric-card">
-                <span class="metric-icon metric-icon-blue" aria-hidden="true">▤</span>
+                <span class="metric-icon metric-icon-blue" aria-hidden="true">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+                </span>
                 <div>
                     <p>Total de leituras</p>
                     <strong id="metric-total">{{ number_format($summary['total_readings'], 0, ',', '.') }}</strong>
@@ -26,7 +28,9 @@
                 </div>
             </article>
             <article class="metric-card">
-                <span class="metric-icon metric-icon-green" aria-hidden="true">↻</span>
+                <span class="metric-icon metric-icon-green" aria-hidden="true">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 1-2.3-5.7L20 7"/><path d="M20 3v4h-4"/></svg>
+                </span>
                 <div>
                     <p>Leituras hoje</p>
                     <strong id="metric-today">{{ number_format($summary['readings_today'], 0, ',', '.') }}</strong>
@@ -34,7 +38,9 @@
                 </div>
             </article>
             <article class="metric-card">
-                <span class="metric-icon metric-icon-purple" aria-hidden="true">⌖</span>
+                <span class="metric-icon metric-icon-purple" aria-hidden="true">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 3v10"/><path d="M8 7h8"/><path d="M5 12c0 4 3 7 7 7s7-3 7-7"/><path d="M8 20h8"/></svg>
+                </span>
                 <div>
                     <p>Nível da água</p>
                     <strong id="metric-water-level">
@@ -44,7 +50,9 @@
                 </div>
             </article>
             <article class="metric-card">
-                <span class="metric-icon {{ $latestReading?->pump_on ? 'metric-icon-amber' : 'metric-icon-muted' }}" aria-hidden="true">◉</span>
+                <span class="metric-icon {{ $latestReading?->pump_on ? 'metric-icon-amber' : 'metric-icon-muted' }}" aria-hidden="true">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/></svg>
+                </span>
                 <div>
                     <p>Estado da bomba</p>
                     <strong id="metric-pump">
@@ -108,7 +116,9 @@
                 <div class="event-list" id="event-list">
                     @forelse ($recentEvents as $event)
                         <article class="event-item">
-                            <span class="event-icon" aria-hidden="true">◉</span>
+                            <span class="event-icon" aria-hidden="true">
+                                <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/></svg>
+                            </span>
                             <div class="event-copy">
                                 <strong>{{ $event['message'] }}</strong>
                                 <p>

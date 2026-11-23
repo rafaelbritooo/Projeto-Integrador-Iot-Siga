@@ -3,6 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\SensorData;
+use App\Models\Device;
+use App\Models\Sensor;
+use App\Models\Area;
+use App\Models\Orgao;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -48,6 +52,49 @@ class IndependentPagesTest extends TestCase
             ->assertJsonPath('devices', [])
             ->assertJsonPath('has_coordinates', false)
             ->assertJsonPath('latest_reading.water_level_cm', 22);
+    }
+
+    public function test_map_uses_the_area_location_linked_to_a_device(): void
+    {
+        $orgao = Orgao::create([
+            'nome' => 'Defesa Civil',
+            'email_institucional' => 'defesa@example.test',
+        ]);
+
+        $area = Area::create([
+            'orgao_id' => $orgao->id_orgaos,
+            'localizacao' => 'R. Santa Isabel, 241 - São Miguel, Juazeiro do Norte - CE',
+            'latitude' => -7.214167,
+            'longitude' => -39.315833,
+        ]);
+
+        $device = Device::create([
+            'code' => 'ESP32-SIGA-001',
+            'name' => 'ESP32-SIGA-001',
+            'location_status' => 'pending',
+            'is_active' => true,
+        ]);
+
+        Sensor::create([
+            'nome_tipo' => 'Sensor de nivel',
+            'status' => 'ativo',
+            'area_id' => $area->id_areas,
+            'device_id' => $device->id,
+        ]);
+
+        $this->postJson('/api/sensor-data', [
+            'water_level_cm' => 72.5,
+            'pump_on' => true,
+            'device_code' => 'ESP32-SIGA-001',
+        ])->assertCreated();
+
+        $this->getJson('/mapa/dados')
+            ->assertOk()
+            ->assertJsonPath('devices.0.code', 'ESP32-SIGA-001')
+            ->assertJsonPath('devices.0.coordinates_source', 'area')
+            ->assertJsonPath('devices.0.latitude', -7.214167)
+            ->assertJsonPath('devices.0.longitude', -39.315833)
+            ->assertJsonPath('devices.0.area_address', 'R. Santa Isabel, 241 - São Miguel, Juazeiro do Norte - CE');
     }
 
     public function test_notifications_show_only_actual_pump_on_readings(): void

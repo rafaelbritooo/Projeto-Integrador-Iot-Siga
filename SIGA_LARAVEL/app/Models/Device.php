@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOne as SensorHasOne;
 
 class Device extends Model
 {
@@ -41,5 +42,10 @@ class Device extends Model
     public function latestSensorData(): HasOne
     {
         return $this->hasOne(SensorData::class)->latestOfMany('created_at');
+    }
+
+    public function sensor(): SensorHasOne
+    {
+        return $this->hasOne(Sensor::class);
     }
 }

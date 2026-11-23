@@ -25,7 +25,7 @@
             <div class="map-page-footer">
                 <div class="map-legend" aria-label="Legenda">
                     <strong>Legenda</strong>
-                    <span><i class="legend-dot legend-device"></i>Dispositivo localizado por Wi-Fi</span>
+                    <span><i class="legend-dot legend-device"></i>Dispositivo localizado por área ou Wi-Fi</span>
                     <span><i class="legend-dot legend-accuracy"></i>Raio estimado de precisão</span>
                     <span><i class="legend-dot legend-blue"></i>Marcador não representa nível de risco</span>
                 </div>

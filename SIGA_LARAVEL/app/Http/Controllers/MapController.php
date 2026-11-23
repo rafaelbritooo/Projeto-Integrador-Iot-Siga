@@ -21,7 +21,7 @@ class MapController extends Controller
     {
         $devices = Device::query()
             ->where('is_active', true)
-            ->with('latestSensorData')
+            ->with(['latestSensorData', 'sensor.area'])
             ->get();
 
         $offlineBefore = now()->subMinutes(
@@ -33,16 +33,23 @@ class MapController extends Controller
         );
 
         $locatedDevices = $devices
-            ->filter(fn (Device $device): bool => $device->latitude !== null && $device->longitude !== null)
-            ->map(fn (Device $device): array => $this->serializeDevice(
-                $device,
-                $offlineBefore,
-                $approximateAccuracy
-            ))
+            ->filter(fn (Device $device): bool => $this->deviceCoordinates($device) !== null)
+            ->map(function (Device $device) use ($offlineBefore, $approximateAccuracy): array {
+                $coordinates = $this->deviceCoordinates($device);
+                $device->latitude = $coordinates['latitude'];
+                $device->longitude = $coordinates['longitude'];
+
+                return $this->serializeDevice(
+                    $device,
+                    $offlineBefore,
+                    $approximateAccuracy,
+                    $coordinates['source'],
+                );
+            })
             ->values();
 
         $unlocatedDevices = $devices
-            ->filter(fn (Device $device): bool => $device->latitude === null || $device->longitude === null)
+            ->filter(fn (Device $device): bool => $this->deviceCoordinates($device) === null)
             ->map(fn (Device $device): array => [
                 'id' => $device->id,
                 'code' => $device->code,
@@ -67,10 +74,38 @@ class MapController extends Controller
         ]);
     }
 
-    private function serializeDevice(Device $device, CarbonInterface $offlineBefore, int $approximateAccuracy): array
+    private function deviceCoordinates(Device $device): ?array
+    {
+        if ($device->latitude !== null && $device->longitude !== null) {
+            return [
+                'latitude' => $device->latitude,
+                'longitude' => $device->longitude,
+                'source' => 'wifi',
+            ];
+        }
+
+        $area = $device->sensor?->area;
+        if ($area && $area->latitude !== null && $area->longitude !== null) {
+            return [
+                'latitude' => $area->latitude,
+                'longitude' => $area->longitude,
+                'source' => 'area',
+            ];
+        }
+
+        return null;
+    }
+
+    private function serializeDevice(
+        Device $device,
+        CarbonInterface $offlineBefore,
+        int $approximateAccuracy,
+        string $coordinatesSource,
+    ): array
     {
         $latestReading = $device->latestSensorData;
         $lastCommunication = $latestReading?->created_at;
+        $area = $device->sensor?->area;
 
         return [
             'id' => $device->id,
@@ -78,6 +113,8 @@ class MapController extends Controller
             'name' => $device->name,
             'latitude' => $device->latitude,
             'longitude' => $device->longitude,
+            'coordinates_source' => $coordinatesSource,
+            'area_address' => $area?->localizacao,
             'location_accuracy' => $device->location_accuracy,
             'location_status' => $device->location_status,
             'location_is_approximate' => $device->location_accuracy !== null

@@ -49,7 +49,9 @@
             <div class="notification-list">
                 @forelse ($notifications as $notification)
                     <article class="notification-item">
-                        <span class="notification-icon" aria-hidden="true">◉</span>
+                        <span class="notification-icon" aria-hidden="true">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/></svg>
+                        </span>
                         <div class="notification-copy">
                             <div class="notification-title">
                                 <h3>Bomba informada como ligada</h3>

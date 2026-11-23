@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuraController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DomainCrudController;
+use App\Http\Controllers\Auth\UsuarioLoginController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReadingController;
@@ -24,6 +26,10 @@ Route::post('/cloudinha', [AuraController::class, 'chat']);
 Route::get('/comparar', [CompareController::class, 'index'])->name('compare.index');
 
 Route::get('/api/weather', [WeatherController::class, 'apiWeather'])->name('api.weather');
+
+Route::get('/login', [UsuarioLoginController::class, 'create'])->name('login');
+Route::post('/login', [UsuarioLoginController::class, 'store'])->name('login.store');
+Route::post('/logout', [UsuarioLoginController::class, 'destroy'])->name('logout');
 
 // Dashboard principal do SIGA
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('siga.dashboard');
@@ -56,6 +62,22 @@ Route::get('/sensor-data-json', [SensorDataController::class, 'getLatestData']);
 
 // Notícias do clima
 Route::get('/noticias-clima', [WeatherNewsController::class, 'index'])->name('weather.news');
+
+Route::middleware('siga.auth')->group(function () {
+    Route::get('/administracao/{entity?}', [DomainCrudController::class, 'index'])
+        ->defaults('entity', 'orgaos')
+        ->middleware('siga.permission:domain.manage')
+        ->name('siga.domain.index');
+
+    Route::middleware('siga.permission:domain.manage')->group(function () {
+        Route::post('/administracao/{entity}', [DomainCrudController::class, 'store'])
+            ->name('siga.domain.store');
+        Route::put('/administracao/{entity}/{id}', [DomainCrudController::class, 'update'])
+            ->name('siga.domain.update');
+        Route::delete('/administracao/{entity}/{id}', [DomainCrudController::class, 'destroy'])
+            ->name('siga.domain.destroy');
+    });
+});
 
 Route::get('/weather-map', function () {
     return view('weather.weather-map');

@@ -256,11 +256,12 @@
                     const position = [device.latitude, device.longitude];
                     bounds.push(position);
                     let marker = markers.get(device.id);
+                    const pumpState = device.latest_reading?.pump_on ? "is-pump-on" : "is-pump-off";
 
                     if (!marker) {
                         const icon = window.L.divIcon({
                             className: "device-marker-wrapper",
-                            html: '<span class="device-marker-pulse"><span></span></span>',
+                            html: `<span class="device-marker-pulse ${pumpState}"><span></span></span>`,
                             iconSize: [28, 28],
                             iconAnchor: [14, 14],
                         });
@@ -268,6 +269,12 @@
                         markers.set(device.id, marker);
                     } else {
                         marker.setLatLng(position);
+                        marker.setIcon(window.L.divIcon({
+                            className: "device-marker-wrapper",
+                            html: `<span class="device-marker-pulse ${pumpState}"><span></span></span>`,
+                            iconSize: [28, 28],
+                            iconAnchor: [14, 14],
+                        }));
                     }
 
                     const tooltip = document.createElement("span");

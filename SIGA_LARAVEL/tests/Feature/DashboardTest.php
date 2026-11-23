@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\SensorData;
+use App\Models\Orgao;
+use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -40,6 +42,37 @@ class DashboardTest extends TestCase
             ->assertJsonPath('data.total_readings', 1)
             ->assertJsonPath('data.readings_today', 1)
             ->assertJsonPath('data.latest_reading.water_level_cm', 12.5);
+    }
+
+    public function test_logged_in_user_sees_api_reading_without_sensor_id(): void
+    {
+        $orgao = Orgao::create([
+            'nome' => 'Orgao SIGA',
+            'email_institucional' => 'contato@siga.test',
+        ]);
+
+        $usuario = Usuario::create([
+            'nome' => 'Usuario SIGA',
+            'status' => 'ativo',
+            'email' => 'usuario@siga.test',
+            'senha' => 'teste',
+            'orgao_id' => $orgao->id_orgaos,
+        ]);
+
+        SensorData::create([
+            'water_level_cm' => 72.5,
+            'rain_sensor_raw' => 1,
+            'water_status' => 'nivel critico',
+            'pump_on' => true,
+            'simulation' => false,
+        ]);
+
+        $this->withSession(['siga_usuario_id' => $usuario->id_usuarios])
+            ->getJson('/dashboard/summary')
+            ->assertOk()
+            ->assertJsonPath('data.total_readings', 1)
+            ->assertJsonPath('data.latest_reading.water_level_cm', 72.5)
+            ->assertJsonPath('data.latest_reading.pump_on', true);
     }
 
     public function test_chart_returns_aggregated_water_levels_for_a_valid_period(): void

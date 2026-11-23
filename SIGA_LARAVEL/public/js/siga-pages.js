@@ -31,6 +31,8 @@
             const rows = [
                 ["Código", device.code],
                 ["Coordenadas estimadas", `${Number(device.latitude).toFixed(6)}, ${Number(device.longitude).toFixed(6)}`],
+                ["Origem da posição", device.coordinates_source === "area" ? "Área cadastrada" : "Localização Wi-Fi"],
+                ["Área", device.area_address || "Não associada"],
                 ["Precisão estimada", device.location_accuracy == null ? "Indisponível" : `raio de ${number(device.location_accuracy)} m`],
                 ["Estado da localização", device.location_status === "located"
                     ? (device.location_is_approximate ? "Estimativa aproximada" : "Estimativa Wi-Fi")
@@ -77,26 +79,32 @@
                 const position = [device.latitude, device.longitude];
                 bounds.push(position);
                 let entry = markers.get(device.id);
+                const pumpState = device.latest_reading?.pump_on ? "is-pump-on" : "is-pump-off";
+                const pumpIcon = () => window.L.divIcon({
+                    className: "device-marker-wrapper",
+                    html: `<span class="device-marker-pulse ${pumpState}"><span></span></span>`,
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14],
+                });
 
                 if (!entry) {
-                    const icon = window.L.divIcon({
-                        className: "device-marker-wrapper",
-                        html: '<span class="device-marker-pulse"><span></span></span>',
-                        iconSize: [28, 28],
-                        iconAnchor: [14, 14],
-                    });
-                    const marker = window.L.marker(position, { icon }).addTo(map);
+                    const marker = window.L.marker(position, { icon: pumpIcon() }).addTo(map);
                     const accuracyCircle = window.L.circle(position, {
                         radius: Math.max(0, Number(device.location_accuracy) || 0),
-                        className: "device-accuracy-circle",
+                        className: `device-accuracy-circle ${pumpState}`,
                         weight: 1,
                     }).addTo(map);
                     entry = { marker, accuracyCircle };
                     markers.set(device.id, entry);
                 } else {
                     entry.marker.setLatLng(position);
+                    entry.marker.setIcon(pumpIcon());
                     entry.accuracyCircle.setLatLng(position);
                     entry.accuracyCircle.setRadius(Math.max(0, Number(device.location_accuracy) || 0));
+                    entry.accuracyCircle.setStyle({
+                        fillColor: pumpState === "is-pump-on" ? "#dc2626" : "#16a34a",
+                        color: pumpState === "is-pump-on" ? "#dc2626" : "#16a34a",
+                    });
                 }
 
                 const tooltip = document.createElement("span");

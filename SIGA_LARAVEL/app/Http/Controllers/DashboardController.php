@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SensorData;
+use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -125,8 +126,10 @@ class DashboardController extends Controller
 
     private function readingsQuery(): Builder
     {
-        return SensorData::query()->select([
+        $query = SensorData::query()->select([
             'id',
+            'device_id',
+            'sensor_id',
             'water_level_cm',
             'rain_sensor_raw',
             'water_status',
@@ -134,6 +137,23 @@ class DashboardController extends Controller
             'simulation',
             'created_at',
         ]);
+
+        $usuarioId = session('siga_usuario_id');
+        if ($usuarioId) {
+            $usuario = Usuario::query()->find($usuarioId);
+
+            if ($usuario?->orgao_id) {
+                $query->where(function (Builder $scoped) use ($usuario): void {
+                    $scoped
+                        ->whereNull('sensor_id')
+                        ->orWhereHas('sensor.area', function (Builder $area) use ($usuario): void {
+                            $area->where('orgao_id', $usuario->orgao_id);
+                        });
+                });
+            }
+        }
+
+        return $query;
     }
 
     private function chartData(string $period): array

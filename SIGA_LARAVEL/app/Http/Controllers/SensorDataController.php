@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\SensorData;
+use App\Models\Sensor;
+use App\Models\Leitura;
+use App\Models\Alerta;
+use App\Models\Acionamento;
+use App\Models\Bomba;
 use App\Services\WifiLocationDispatcher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -41,6 +46,11 @@ class SensorDataController extends Controller
             'simulation' => [
                 'sometimes',
                 'boolean',
+            ],
+            'sensor_id' => [
+                'sometimes',
+                'integer',
+                'exists:sensores,id_sensores',
             ],
             'device_code' => [
                 'sometimes',
@@ -154,6 +164,7 @@ class SensorDataController extends Controller
         // Identifica como dados reais quando não informado.
         $sensorFields = $dataFields;
         $sensorFields[] = 'simulation';
+        $sensorFields[] = 'sensor_id';
         $sensorPayload = array_intersect_key($validated, array_flip($sensorFields));
         $sensorPayload['simulation'] = $sensorPayload['simulation'] ?? false;
 
@@ -166,11 +177,64 @@ class SensorDataController extends Controller
                     'location_status' => 'pending',
                 ],
             );
+
+            $linkedSensor = Sensor::query()
+                ->where('device_id', $device->id)
+                ->first();
+
+            if ($linkedSensor) {
+                $sensorPayload['sensor_id'] = $linkedSensor->id_sensores;
+                $validated['sensor_id'] = $linkedSensor->id_sensores;
+            }
         }
 
         $sensorData = $device
             ? $device->sensorData()->create($sensorPayload)
             : SensorData::create($sensorPayload);
+
+        if (! empty($validated['sensor_id'])) {
+            $sensor = Sensor::query()->with('area')->find($validated['sensor_id']);
+
+            $readingValue = $validated['water_level_cm']
+                ?? $validated['rain_sensor_raw']
+                ?? 0;
+
+            Leitura::create([
+                'sensor_id' => $sensor->id_sensores,
+                'data_leitura' => now(),
+                'valor' => $readingValue,
+                'status' => $validated['water_status'] ?? 'recebida',
+            ]);
+
+            $critical = ($validated['water_level_cm'] ?? 0) >= 70
+                || str_contains(strtolower((string) ($validated['water_status'] ?? '')), 'alag')
+                || str_contains(strtolower((string) ($validated['water_status'] ?? '')), 'crit');
+
+            if ($critical) {
+                Alerta::create([
+                    'tipo' => 'nivel_critico',
+                    'status' => 'novo',
+                    'descricao' => 'Sensor detectou condição crítica.',
+                    'sensor_id' => $sensor->id_sensores,
+                    'bomba_id' => null,
+                ]);
+            }
+
+            if (($validated['pump_on'] ?? false) && $sensor->area_id) {
+                $bomba = Bomba::query()
+                    ->where('area_id', $sensor->area_id)
+                    ->where('status', 'ativo')
+                    ->first();
+
+                if ($bomba) {
+                    Acionamento::create([
+                        'bomba_id' => $bomba->id_bombas,
+                        'data_hora' => now(),
+                        'status' => 'ligada',
+                    ]);
+                }
+            }
+        }
 
         if (array_key_exists('wifi_access_points', $validated)) {
             $wifiLocationDispatcher->enqueue(

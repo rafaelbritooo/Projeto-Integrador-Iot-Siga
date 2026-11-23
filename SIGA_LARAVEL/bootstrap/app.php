@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\SigaAuth;
+use App\Http\Middleware\SigaPermission;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,7 +15,15 @@ return Application::configure(basePath: dirname(__DIR__))
 )
 
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->trustProxies(at: '*');
+
+        $middleware->alias([
+            'siga.auth' => SigaAuth::class,
+            'siga.permission' => SigaPermission::class,
+        ]);
+        $middleware->validateCsrfTokens(except: [
+            'api/domain/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
